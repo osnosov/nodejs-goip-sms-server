@@ -1,0 +1,29 @@
+version: '3.4'
+
+services:
+  backend:
+    container_name: nodejs-goip-sms-server
+    image: nodejs-goip-sms-server:0.0.1
+    build:
+      context: ./backend
+      target: production
+      dockerfile: ./Dockerfile
+    command: npm run start:prod
+    environment:
+      - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
+      - TELEGRAM_ADMIN=${TELEGRAM_ADMIN}
+      - PORT=${PORT}
+      - HOST=${HOST}
+      - UDP_PORT=${UDP_PORT}
+      - UDP_HOST=${UDP_HOST}
+    ports:
+      - 3000:3000
+      - 44444:44444/udp
+    networks:
+      - nodejs-goip-sms-server
+    volumes:
+      - /usr/src/node_modules
+    restart: unless-stopped
+
+networks:
+  nodejs-goip-sms-server:
